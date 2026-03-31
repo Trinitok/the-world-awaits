@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stats for Nerds · Birthday Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Libre+Baskerville:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #f5efe6;
+    --warm: #e8dcc8;
+    --ink: #1a1410;
+    --rust: #b85c2a;
+    --gold: #c9923a;
+    --sage: #6b7c5e;
+    --mist: #8fa3a8;
+    --blush: #e8c4b0;
+    --green: #3a7a4a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #0f0d0a; color: #e8dcc8; font-family: 'IBM Plex Mono', monospace; overflow-x: hidden; }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: #0f0d0a; padding: 3rem 2rem 2rem; text-align: center; border-bottom: 1px solid rgba(201,146,58,0.2);
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(201,146,58,0.05) 20px),
+                      repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(201,146,58,0.05) 20px);
+  }
+  .back-link {
+    display: inline-block; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--mist); text-decoration: none; margin-bottom: 1.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--gold); }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 400; color: var(--gold); letter-spacing: -0.02em;
+  }
+  .page-header p { margin-top: 0.5rem; font-size: 0.8rem; color: var(--mist); letter-spacing: 0.1em; }
+
+  .terminal-tag {
+    display: inline-block; margin-top: 1rem;
+    background: rgba(201,146,58,0.1); border: 1px solid rgba(201,146,58,0.3); border-radius: 2px;
+    padding: 0.3rem 0.9rem; font-size: 0.72rem; color: var(--gold); letter-spacing: 0.1em;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+  /* ── SECTION ── */
+  .stat-section { margin-bottom: 3.5rem; }
+  .stat-section-title {
+    font-family: 'Libre Baskerville', serif; font-size: 0.62rem;
+    letter-spacing: 0.35em; text-transform: uppercase; color: var(--rust);
+    border-bottom: 1px solid rgba(184,92,42,0.3);
+    padding-bottom: 0.6rem; margin-bottom: 1.5rem;
+  }
+
+  /* ── TRAVEL TABLE ── */
+  .travel-table { width: 100%; border-collapse: collapse; }
+  .travel-table th {
+    text-align: left; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mist); padding: 0.5rem 0.8rem; border-bottom: 1px solid rgba(245,239,230,0.08);
+  }
+  .travel-table td {
+    padding: 0.8rem; font-size: 0.82rem; border-bottom: 1px solid rgba(245,239,230,0.05); vertical-align: top;
+    color: rgba(232,220,200,0.85);
+  }
+  .travel-table tr:last-child td { border-bottom: none; }
+  .travel-table tr:hover td { background: rgba(201,146,58,0.04); }
+  .leg-label { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; color: var(--sand); }
+  .leg-detail { font-size: 0.75rem; color: var(--mist); margin-top: 0.2rem; }
+  .time-badge {
+    display: inline-block; background: rgba(184,92,42,0.15); border: 1px solid rgba(184,92,42,0.3);
+    color: var(--blush); border-radius: 2px; padding: 0.15rem 0.5rem; font-size: 0.75rem;
+  }
+  .note-cell { font-size: 0.75rem; color: var(--sage); font-style: italic; }
+
+  /* ── COST CARDS ── */
+  .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .cost-card {
+    background: rgba(245,239,230,0.04); border: 1px solid rgba(245,239,230,0.1);
+    border-radius: 3px; padding: 1.2rem 1.4rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .cost-card:hover { border-color: rgba(201,146,58,0.3); background: rgba(245,239,230,0.06); }
+  .cost-card-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.5rem; }
+  .cost-card-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic; color: var(--sand); margin-bottom: 0.8rem; }
+  .cost-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; padding: 0.25rem 0; border-bottom: 1px solid rgba(245,239,230,0.05); color: rgba(232,220,200,0.75); }
+  .cost-line:last-of-type { border-bottom: none; }
+  .cost-line .amount { font-family: 'IBM Plex Mono', monospace; color: var(--gold); }
+  .cost-subtotal {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid rgba(201,146,58,0.2);
+    font-size: 0.82rem; font-weight: 500; color: var(--sand);
+  }
+  .cost-subtotal .amount { font-family: 'IBM Plex Mono', monospace; color: var(--gold); }
+
+  /* ── GRAND TOTAL ── */
+  .grand-total-box {
+    background: rgba(201,146,58,0.08); border: 1px solid rgba(201,146,58,0.3);
+    border-radius: 3px; padding: 1.5rem 2rem; margin-top: 2rem;
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
+  }
+  .grand-total-box .label { font-family: 'Libre Baskerville', serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); }
+  .grand-total-box .amount {
+    font-family: 'IBM Plex Mono', monospace; font-size: 2rem; color: var(--gold);
+  }
+  .grand-total-box .range { font-size: 0.75rem; color: var(--sage); margin-top: 0.25rem; }
+
+  /* ── NOTES ── */
+  .notes-list { list-style: none; }
+  .notes-list li {
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(245,239,230,0.05);
+    font-size: 0.82rem; color: rgba(232,220,200,0.75); padding-left: 1.2rem; position: relative; line-height: 1.65;
+  }
+  .notes-list li::before { content: '»'; position: absolute; left: 0; color: var(--rust); }
+  .notes-list li strong { color: var(--sand); font-weight: 500; }
+  .notes-list li:last-child { border-bottom: none; }
+
+  /* ── TIMELINE BAR ── */
+  .day-bar { display: flex; width: 100%; height: 48px; border-radius: 3px; overflow: hidden; margin-bottom: 0.6rem; }
+  .day-seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.85); font-family: 'Libre Baskerville', serif;
+    overflow: hidden; white-space: nowrap; cursor: default;
+    transition: filter 0.2s;
+  }
+  .day-seg:hover { filter: brightness(1.15); }
+  .seg-drive  { background: #4a5568; flex: 2.5; }
+  .seg-brunch { background: #8b5e3c; flex: 1.5; }
+  .seg-museum { background: #5e7a6b; flex: 1; }
+  .seg-obs    { background: #4a7a8a; flex: 1; }
+  .seg-break  { background: #3a3a2a; flex: 1.5; }
+  .seg-dinner { background: #7a3a2a; flex: 2; }
+  .bar-legend { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; margin-top: 0.4rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.65rem; color: var(--mist); }
+  .legend-dot  { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 600px) {
+    .cost-grid { grid-template-columns: 1fr; }
+    .day-seg { font-size: 0; } /* hide labels on tiny screens */
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <a href="birthday_wanderlust.html" class="back-link">← Back to the Birthday Site</a>
+  <h1>Stats for Nerds</h1>
+  <p>Because every great day deserves a spreadsheet behind it.</p>
+  <span class="terminal-tag">🎂 Birthday Edition · April · Chicago</span>
+</header>
+
+<main>
+
+  <!-- DAY TIMELINE -->
+  <div class="stat-section">
+    <p class="stat-section-title">Day at a Glance</p>
+    <div class="day-bar">
+      <div class="day-seg seg-drive" title="Drive from Mt. Prospect → Logan Square (~45–60 min)">Drive</div>
+      <div class="day-seg seg-brunch" title="Venteux Noon–2pm">Venteux</div>
+      <div class="day-seg seg-museum" title="Driehaus 2–3:30pm">Museum</div>
+      <div class="day-seg seg-obs" title="360 Chicago 3:30–5pm">360°</div>
+      <div class="day-seg seg-break" title="Downtime / MOI 5–7pm">Downtime</div>
+      <div class="day-seg seg-dinner" title="Miru dinner 7pm+">Miru</div>
+    </div>
+    <div class="bar-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#4a5568"></span>Drive</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#8b5e3c"></span>Venteux Brunch</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#5e7a6b"></span>Driehaus Museum</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#4a7a8a"></span>360 Chicago</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#3a3a2a"></span>Downtime / MOI</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#7a3a2a"></span>Miru Dinner</span>
+    </div>
+  </div>
+
+  <!-- TRAVEL LEGS -->
+  <div class="stat-section">
+    <p class="stat-section-title">Travel Legs &amp; Times</p>
+    <table class="travel-table">
+      <thead>
+        <tr>
+          <th>Leg</th>
+          <th>Mode</th>
+          <th>Est. Time</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="leg-label">Logan Square → Mt. Prospect</div>
+            <div class="leg-detail">Drive to pick her up</div>
+          </td>
+          <td>🚗 Drive</td>
+          <td><span class="time-badge">~45–60 min</span></td>
+          <td class="note-cell">Add buffer for traffic on I-90/94. Leave by ~10am to arrive back in the city by noon.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">Mt. Prospect → Logan Square</div>
+            <div class="leg-detail">Home base before heading out</div>
+          </td>
+          <td>🚗 Drive</td>
+          <td><span class="time-badge">~45–60 min</span></td>
+          <td class="note-cell">Allow time to freshen up / get ready. Park at home before switching to Uber.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">Logan Square → Venteux</div>
+            <div class="leg-detail">224 N Michigan Ave</div>
+          </td>
+          <td>🚕 Uber</td>
+          <td><span class="time-badge">~20–30 min</span></td>
+          <td class="note-cell">Midday — moderate traffic on Milwaukee / Lake Shore. ~$18–28 est.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">Venteux → Driehaus Museum</div>
+            <div class="leg-detail">224 N Michigan → 50 E Erie</div>
+          </td>
+          <td>🚶 Walk</td>
+          <td><span class="time-badge">~8 min walk</span></td>
+          <td class="note-cell">Only ~0.4 miles — a lovely stroll up Michigan Ave. No Uber needed here!</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">Driehaus → 360 Chicago</div>
+            <div class="leg-detail">50 E Erie → 875 N Michigan</div>
+          </td>
+          <td>🚶 Walk</td>
+          <td><span class="time-badge">~10 min walk</span></td>
+          <td class="note-cell">~0.5 miles north along the Magnificent Mile. Easy afternoon stroll.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">360 Chicago → River / MOI</div>
+            <div class="leg-detail">875 N Michigan → Chicago River / Loop</div>
+          </td>
+          <td>🚕 Uber</td>
+          <td><span class="time-badge">~10–15 min</span></td>
+          <td class="note-cell">~$12–18 est. Short hop south. Or walk ~25 min along Michigan if weather is nice.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">MOI / River → Miru</div>
+            <div class="leg-detail">Loop → 401 E Wacker Dr, St. Regis</div>
+          </td>
+          <td>🚕 Uber</td>
+          <td><span class="time-badge">~8–12 min</span></td>
+          <td class="note-cell">~$12–16 est. Very short ride from the Loop/River area.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="leg-label">Miru → Logan Square</div>
+            <div class="leg-detail">End of night</div>
+          </td>
+          <td>🚕 Uber</td>
+          <td><span class="time-badge">~20–30 min</span></td>
+          <td class="note-cell">Late evening — lighter traffic. ~$20–30 est.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- COST BREAKDOWN -->
+  <div class="stat-section">
+    <p class="stat-section-title">Cost Breakdown (Per Person × 2)</p>
+    <div class="cost-grid">
+
+      <div class="cost-card">
+        <p class="cost-card-label">🍽 Stop 1</p>
+        <p class="cost-card-name">Venteux Brunch</p>
+        <div class="cost-line"><span>Brunch entrées (est. avg $22–28 each)</span><span class="amount">~$50–60</span></div>
+        <div class="cost-line"><span>Bottomless mimosas ($29 each)</span><span class="amount">~$58</span></div>
+        <div class="cost-line"><span>Tax &amp; tip (est. 30%)</span><span class="amount">~$32</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$140–150</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">🏛 Stop 2</p>
+        <p class="cost-card-name">Driehaus Museum</p>
+        <div class="cost-line"><span>General admission × 2 ($20/ea)</span><span class="amount">$40</span></div>
+        <div class="cost-line"><span>Optional guided tour × 2 (+$7/ea)</span><span class="amount">+$14</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">$40–54</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">🔭 Stop 3</p>
+        <p class="cost-card-name">360 Chicago</p>
+        <div class="cost-line"><span>General admission × 2 (~$30/ea)</span><span class="amount">~$60</span></div>
+        <div class="cost-line"><span>CloudBar drinks (optional, ~$18–22/ea)</span><span class="amount">~$40</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$60–100</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">✨ Stop 4</p>
+        <p class="cost-card-name">Museum of Illusions</p>
+        <div class="cost-line"><span>Admission × 2 (~$22–34/ea online)</span><span class="amount">~$44–68</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$44–68</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">🥂 Stop 5</p>
+        <p class="cost-card-name">Miru at St. Regis</p>
+        <div class="cost-line"><span>Dinner (shared plates, nigiri, mains)</span><span class="amount">~$120–180</span></div>
+        <div class="cost-line"><span>Cocktails / sake (2–3 each, ~$20–24)</span><span class="amount">~$80–100</span></div>
+        <div class="cost-line"><span>Tax &amp; tip (est. 30%)</span><span class="amount">~$60–84</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$260–364</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">🚕 Transport</p>
+        <p class="cost-card-name">Uber Rides</p>
+        <div class="cost-line"><span>Logan Square → Venteux</span><span class="amount">~$18–28</span></div>
+        <div class="cost-line"><span>360 Chicago → River/MOI</span><span class="amount">~$12–18</span></div>
+        <div class="cost-line"><span>MOI/River → Miru</span><span class="amount">~$12–16</span></div>
+        <div class="cost-line"><span>Miru → Home (end of night)</span><span class="amount">~$20–30</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$62–92</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">⛽ Driving</p>
+        <p class="cost-card-name">Mt. Prospect Round Trip</p>
+        <div class="cost-line"><span>Gas (est. ~50 mi round trip)</span><span class="amount">~$8–12</span></div>
+        <div class="cost-line"><span>Home parking (if applicable)</span><span class="amount">—</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$8–12</span></div>
+      </div>
+
+      <div class="cost-card">
+        <p class="cost-card-label">🍿 Extras</p>
+        <p class="cost-card-name">Miscellaneous</p>
+        <div class="cost-line"><span>Snacks between stops</span><span class="amount">~$10–20</span></div>
+        <div class="cost-line"><span>Gift / flowers (optional)</span><span class="amount">~$30–60</span></div>
+        <div class="cost-line"><span>Small surprises / tips</span><span class="amount">~$10–20</span></div>
+        <div class="cost-subtotal"><span>Subtotal</span><span class="amount">~$50–100</span></div>
+      </div>
+
+    </div>
+
+    <div class="grand-total-box">
+      <div>
+        <div class="label">Estimated Total (2 people)</div>
+        <div class="range">Low estimate · no tour, MOI, or extras</div>
+      </div>
+      <div class="amount">~$664–$930</div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="stat-section">
+    <p class="stat-section-title">Planner Notes &amp; Pro Tips</p>
+    <ul class="notes-list">
+      <li><strong>Leave Logan Square by ~9:45am</strong> to pick her up in Mt. Prospect and still arrive at Venteux comfortably by noon.</li>
+      <li><strong>Book Driehaus tickets online in advance</strong> — timed entry helps avoid waits. The guided tour is highly rated and worth the $7.</li>
+      <li><strong>360 Chicago: buy tickets online beforehand</strong> to skip the ticket desk line. Afternoon timing (3:30–5pm) is great for pre-sunset light.</li>
+      <li><strong>Museum of Illusions: pre-book online</strong> at moichicago.com — walk-up can be ~$34/person vs ~$22 online in advance.</li>
+      <li><strong>Miru reservation is critical</strong> — request a terrace or window table overlooking the river. Book well in advance on OpenTable.</li>
+      <li><strong>Uber surge pricing</strong> is possible around 5pm and again post-dinner (~10pm). Budget the higher end of each estimate to be safe.</li>
+      <li><strong>Weather contingency:</strong> If it rains, the walk legs (Venteux→Driehaus, Driehaus→360) become Ubers. Budget an extra ~$25–35.</li>
+      <li><strong>The 3.5% surcharge</strong> appears on both Venteux and Miru checks per their menus — factor into tip calculations.</li>
+      <li><strong>Total drive time for the day:</strong> ~1.5–2 hours driving (Mt. Prospect round trip). Everything downtown is walkable or a short Uber.</li>
+    </ul>
+  </div>
+
+</main>
+
+</body>
+</html>
